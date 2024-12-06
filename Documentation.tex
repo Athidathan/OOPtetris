@@ -85,9 +85,8 @@ public:
     Position operator+(const Position& other) const ;
 };
 \end{lstlisting}
-
-\subsection{\texttt{Block} Class (\texttt{src/block.h}, \texttt{src/block.cpp})}
-
+\subsection{\texttt{Block} Class Hierarchy (\texttt{src/block.h}, \texttt{src/block.cpp,\texttt{src/blocks.cpp}})}
+\subsubsection{Base \texttt{Block} Class}
 \textbf{Encapsulation}: The \texttt{Block} class encapsulates the properties and behaviors of a Tetris block.
 
 \begin{lstlisting}[language=C++]
@@ -468,35 +467,34 @@ Demonstrates how the game logic moves the current block down at regular interval
 
 \section{Building the Project}
 
-To run this project, you need to have the Raylib library installed. Raylib is a simple and easy-to-use library for enjoying videogames programming.
+To build and run the Tetris game, follow these steps:
 
 \subsection{Requirements}
 
-- **Raylib Library**: Download and install Raylib from [www.raylib.com](https://www.raylib.com/). Ensure it is properly configured on your system.
+\begin{itemize}
+    \item \textbf{Operating System}: Windows 10 or higher
+    \item \textbf{Compiler}: MinGW-w64 (GCC for Windows) or Microsoft Visual Studio
+    \item \textbf{Library}: \href{https://www.raylib.com/}{Raylib} (version 4.0 or higher)
+    \item \textbf{Make Build system}: MinGW-w64 includes \texttt{mingw32-make} for building the project using the provided \texttt{Makefile}.
+\end{itemize}
 
-\subsection{Building and Running with Visual Studio Code}
+\subsection{Instructions}
 
-If you are using Visual Studio Code, you can utilize the provided workspace file `main.code-workspace` for an easier setup.
-
-To build and run the project in VSCode:
-
-1. Open the `main.code-workspace` file in VSCode.
-2. Press `F5` to build and run the project using the provided tasks and launch configurations.
-
-\subsection{Running the Precompiled Version}
-
-Alternatively, if you prefer a precompiled version, you can use the `game.exe` file provided in the project directory. Simply double-click the `game.exe` file to start the game.
-
-\subsection{Building from the Command Line}
-
-You can also build the project using the provided `Makefile`. Open a terminal in the project directory and run:
-
-\begin{verbatim}
-make
-\end{verbatim}
-
-This command will compile the source files and link the necessary libraries to produce the final executable.
-
+\begin{enumerate}
+    \item Install the required compiler and Raylib library.
+    \item Open the Command Prompt and navigate to the project directory:
+    \begin{lstlisting}
+    cd path\to\your\project
+    \end{lstlisting}
+    \item Compile the project using the provided \texttt{Makefile}:
+    \begin{lstlisting}
+    mingw32-make
+    \end{lstlisting}
+    \item Run the game executable:
+    \begin{lstlisting}
+    game.exe
+    \end{lstlisting}
+\end{enumerate}
 \section{Future Plans}
 
 Looking ahead, there are several enhancements planned to expand the functionality and educational value of this Tetris project:
@@ -510,6 +508,88 @@ Looking ahead, there are several enhancements planned to expand the functionalit
         \item \textbf{Challenge Mode}: Players face progressively increasing difficulty levels with unique challenges.
         \item \textbf{Time Attack Mode}: Players aim to score as high as possible within a limited time frame.
     \end{itemize}
+\end{itemize}
+\section{Requirements and Build Instructions}
+
+This section provides detailed instructions on the system requirements, dependencies, and steps to build and run the Tetris project on your local machine. The project is developed in C++ using the Raylib graphics library, and the instructions are tailored for Windows users.
+this project was developed on Windows 10 using MinGW-w64 as the compiler. The instructions assume a similar setup, but the project can be adapted for other platforms with minor modifications.
+\subsection{System Requirements}
+
+\begin{itemize}
+    \item \textbf{Operating System}: Windows 10 or higher
+    \item \textbf{Compiler}:
+    \begin{itemize}
+        \item \textbf{Option 1}: MinGW-w64 (GCC for Windows)
+        \item \textbf{Option 2}: Microsoft Visual Studio with C++ support
+    \end{itemize}
+    \item \textbf{Libraries}:
+    \begin{itemize}
+        \item \href{https://www.raylib.com/}{Raylib} (version 4.0 or higher)
+    \end{itemize}
+\end{itemize}
+
+\subsection{Installing Dependencies}
+
+\subsubsection{Installing MinGW-w64}
+
+\begin{enumerate}
+    \item Download the MinGW-w64 installer from the \href{https://www.mingw-w64.org/}{official website}.
+    \item Run the installer and select the architecture (x86\_64 for 64-bit systems).
+    \item Add the installation \texttt{bin} directory to your system \texttt{PATH} environment variable.
+\end{enumerate}
+
+\subsubsection{Installing Raylib}
+
+\begin{enumerate}
+    \item Download the precompiled Windows binaries for Raylib from the \href{https://github.com/raysan5/raylib/releases}{GitHub releases page}.
+    \item Extract the contents to a known directory, e.g., \texttt{C:\textbackslash raylib}.
+    \item Copy the \texttt{raylib\_compiled\_lib\textbackslash raylib\_libs\textbackslash MinGW} library files to your MinGW installation's \texttt{lib} directory.
+    \item Copy the \texttt{raylib.h} header file to your MinGW installation's \texttt{include} directory.
+\end{enumerate}
+
+\subsubsection{Alternative: Using Microsoft Visual Studio}
+
+\begin{enumerate}
+    \item Install Microsoft Visual Studio with C++ development tools.
+    \item Use the NuGet package manager to install Raylib or manually configure Raylib in your project settings.
+\end{enumerate}
+
+\subsection{Building the Project}
+
+\subsubsection{Using Command Prompt}
+
+\begin{enumerate}
+    \item Open the Command Prompt and navigate to the project directory:
+    \begin{lstlisting}
+    cd path\to\your\project
+    \end{lstlisting}
+    \item Compile the project using the provided \texttt{Makefile}:
+    \begin{lstlisting}
+    mingw32-make
+    \end{lstlisting}
+    \item If \texttt{mingw32-make} is not available, compile manually:
+    \begin{lstlisting}
+    g++ src\*.cpp -o game.exe -Iinclude -Llib -lraylib -lopengl32 -lgdi32 -lwinmm
+    \end{lstlisting}
+    \item Ensure that the \texttt{lib} directory contains the necessary Raylib library files.
+\end{enumerate}
+
+\subsubsection{Running the Game}
+
+\begin{enumerate}
+    \item After successful compilation, run the executable:
+    \begin{lstlisting}
+    game.exe
+    \end{lstlisting}
+    \item Enjoy the Tetris game!
+\end{enumerate}
+
+\subsection{Notes}
+
+\begin{itemize}
+    \item Make sure all source files are located in the \texttt{src} directory.
+    \item Ensure that the \texttt{lib} directory includes all dependency libraries (\texttt{.dll}, \texttt{.lib} files).
+    \item If you encounter any issues with missing DLLs, make sure the Raylib DLL files are in the same directory as the executable or added to the system \texttt{PATH}.
 \end{itemize}
 
 \section{Conclusion}
