@@ -1,15 +1,13 @@
-#pragma once
+#pragma once    
 #include "grid.h"
 #include "blocks.cpp"
 
-class Game
-{
+class Game{
 public:
     Game();
     ~Game();
     void Draw();
-    void HandleInput();
-    
+    void HandleInput(); 
     void MoveBlockDown();
     bool gameOver;
     int score;

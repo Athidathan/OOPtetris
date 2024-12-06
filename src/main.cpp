@@ -5,8 +5,7 @@
 
 double lastUpdateTime = 0;
 
-bool EventTriggered(double interval)
-{
+bool EventTriggered(double interval){
     double currentTime = GetTime();
     if (currentTime - lastUpdateTime >= interval)
     {
@@ -16,8 +15,7 @@ bool EventTriggered(double interval)
     return false;
 }
 
-int main()
-{
+int main(){
     InitWindow(500, 620, "Tetris");
     SetTargetFPS(60);
 
@@ -25,8 +23,8 @@ int main()
 
     Game game = Game();
 
-    while (WindowShouldClose() == false)
-    {
+    while (WindowShouldClose() == false){
+        UpdateMusicStream(game.music);
         game.HandleInput();
         if (EventTriggered(0.2)) 
             game.MoveBlockDown();
@@ -41,8 +39,9 @@ int main()
         DrawRectangleRounded({320, 55, 170, 60}, 0.3, 6, darkGrey);
         char scoreText[10];
         sprintf(scoreText, "%d", game.score);
+        Vector2 textSize = MeasureTextEx(font, scoreText, 38, 2);
 
-        DrawTextEx(font, scoreText, {3, 65}, 38, 2, WHITE);
+        DrawTextEx(font, scoreText, {320 + (170 - textSize.x) / 2, 65}, 38, 2, WHITE);
         DrawRectangleRounded({320, 215, 170, 180}, 0.3, 6, darkGrey);
         game.Draw();
         EndDrawing();

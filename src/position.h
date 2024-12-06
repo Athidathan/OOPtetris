@@ -1,7 +1,6 @@
 #pragma once
 
-class Position
-{
+class Position{
 public:
     int row;
     int column;

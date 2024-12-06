@@ -1,53 +1,47 @@
 #include "game.h"
 #include <random>
 
-Game::Game()
-{
+Game::Game(){
     grid = Grid();
     blocks = GetAllBlocks();
     currentBlock = GetRandomBlock();
     nextBlock = GetRandomBlock();
     gameOver = false;
     score = 0;
-    // InitAudioDevice();
-    // music = LoadMusicStream("Sounds/music.mp3");
-    // PlayMusicStream(music);
-    // rotateSound = LoadSound("Sounds/rotate.mp3");
-    // clearSound = LoadSound("Sounds/clear.mp3");
+    InitAudioDevice();
+    music = LoadMusicStream("Sounds/music.mp3");
+    PlayMusicStream(music);
+    rotateSound = LoadSound("Sounds/rotate.mp3");
+    clearSound = LoadSound("Sounds/clear.mp3");
 }
 
-Game::~Game()
-{
-    // UnloadSound(rotateSound);
-    // UnloadSound(clearSound);
-    // UnloadMusicStream(music);
-    // CloseAudioDevice();
+Game::~Game(){
+    UnloadSound(rotateSound);
+    UnloadSound(clearSound);
+    UnloadMusicStream(music);
+    CloseAudioDevice();
+    blocks.clear();
 }
 
-Block Game::GetRandomBlock()
-{
+Block Game::GetRandomBlock(){
     if (blocks.empty())
-    {
         blocks = GetAllBlocks();
-    }
+
     int randomIndex = rand() % blocks.size();
     Block block = blocks[randomIndex];
     blocks.erase(blocks.begin() + randomIndex);
     return block;
 }
 
-std::vector<Block> Game::GetAllBlocks()
-{
+std::vector<Block> Game::GetAllBlocks(){
     return {IBlock(), JBlock(), LBlock(), OBlock(), SBlock(), TBlock(), ZBlock()};
 }
 
-void Game::Draw()
-{
+void Game::Draw(){
     grid.Draw();
     currentBlock.Draw(11, 11);
     // priview next block
-    switch (nextBlock.id)
-    {
+    switch (nextBlock.id){
     case 3:
         nextBlock.Draw(255, 290);
         break;
@@ -59,17 +53,14 @@ void Game::Draw()
         break;
     }
 }
-// make this virtual?
-void Game::HandleInput()
-{
+// make this virtual later?
+void Game::HandleInput(){
     int keyPressed = GetKeyPressed();
-    if (gameOver && keyPressed != 0)
-    {
+    if (gameOver && keyPressed != 0){
         gameOver = false;
         Reset();
     }
-    switch (keyPressed)
-    {
+    switch (keyPressed){
     case KEY_LEFT:
         MoveBlockLeft();
         break;
@@ -80,8 +71,7 @@ void Game::HandleInput()
         // Soft drop
         MoveBlockDown();
         MoveBlockDown();
-        MoveBlockDown();
-        UpdateScore(0, 1);
+        UpdateScore(0, 2);
         break;
     case KEY_UP:
         RotateBlock();
@@ -89,108 +79,78 @@ void Game::HandleInput()
     }
 }
 
-void Game::MoveBlockLeft()
-{
-    if (!gameOver)
-    {
+void Game::MoveBlockLeft(){
+    if (!gameOver){
         currentBlock.Move(0, -1);
         if (IsBlockOutside() || BlockFits() == false)
-        {
             currentBlock.Move(0, 1);
-        }
     }
 }
 
-void Game::MoveBlockRight()
-{
-    if (!gameOver)
-    {
+void Game::MoveBlockRight(){
+    if (!gameOver){
         currentBlock.Move(0, 1);
         if (IsBlockOutside() || BlockFits() == false)
-        {
             currentBlock.Move(0, -1);
-        }
     }
 }
 
-void Game::MoveBlockDown()
-{
-    if (!gameOver)
-    {
+void Game::MoveBlockDown(){
+    if (!gameOver){
         currentBlock.Move(1, 0);
-        if (IsBlockOutside() || BlockFits() == false)
-        {
+        if (IsBlockOutside() || BlockFits() == false){
             currentBlock.Move(-1, 0);
             LockBlock();
         }
     }
 }
 
-bool Game::IsBlockOutside()
-{
+bool Game::IsBlockOutside(){
     std::vector<Position> tiles = currentBlock.GetCellPositions(); // should i have used a reference here? this line is repeated alot
-    for (Position item : tiles)
-    {
+    for (Position item : tiles){
         if (grid.IsCellOutside(item.row, item.column))
-        {
             return true;
-        }
     }
     return false;
 }
 
-void Game::RotateBlock()
-{
-    if (!gameOver)
-    {
+void Game::RotateBlock(){
+    if (!gameOver){
         currentBlock.Rotate();
         if (IsBlockOutside() || BlockFits() == false)
-        {
             currentBlock.UndoRotation();
-        }
-        else
-        {
-            // PlaySound(rotateSound);
-        }
+        else 
+            PlaySound(rotateSound); 
     }
 }
 
-void Game::LockBlock()
-{
+void Game::LockBlock(){
     std::vector<Position> tiles = currentBlock.GetCellPositions();
     for (Position item : tiles)
-    {
         grid.grid[item.row][item.column] = currentBlock.id;
-    }
+
     currentBlock = nextBlock;
     if (BlockFits() == false)
-    {
         gameOver = true;
-    }
+
     nextBlock = GetRandomBlock();
     int rowsCleared = grid.ClearFullRows();
-    if (rowsCleared > 0)
-    {
-        // PlaySound(clearSound);
+    if (rowsCleared > 0){
         UpdateScore(rowsCleared, 0);
+        PlaySound(clearSound);       
     }
 }
 
-bool Game::BlockFits()
-{
+bool Game::BlockFits(){
     std::vector<Position> tiles = currentBlock.GetCellPositions();
-    for (Position item : tiles)
-    {
+    for (Position item : tiles){   
         if (grid.IsCellEmpty(item.row, item.column) == false)
-        {
             return false;
-        }
     }
     return true;
 }
 
-void Game::Reset()
-{
+void Game::Reset(){
     grid.Initialize();
     blocks = GetAllBlocks();
     currentBlock = GetRandomBlock();
@@ -198,10 +158,8 @@ void Game::Reset()
     score = 0;
 }
 
-void Game::UpdateScore(int linesCleared, int moveDownPoints)
-{
-    switch (linesCleared)
-    {
+void Game::UpdateScore(int linesCleared, int moveDownPoints){
+    switch (linesCleared){
     case 1:
         score += 100;
         break;
