@@ -6,6 +6,7 @@
 #include "single_player.h"
 #include "two_player.h"
 #include <stdexcept>
+#include <memory>
  // For exception handling
 double lastUpdateTime = 0;
 bool EventTriggered(double interval){
@@ -48,12 +49,22 @@ int main() {
         PlayMusicStream(music);
         int mode = ShowTitleScreen();
 
-        Player* game = nullptr;
+        // Player* game = nullptr;
+        // if (mode == 1) {
+        //     game = new SinglePlayer();
+        // } else if (mode == 2) {
+        //     SetWindowSize(1000, 620); // Adjust window size for two-player mode
+        //     game = new TwoPlayer();
+        // } else {
+        //     throw std::runtime_error("Invalid game mode selected.");
+        // }
+
+        std::unique_ptr<Player> game = nullptr;
         if (mode == 1) {
-            game = new SinglePlayer();
+            game = std::make_unique<SinglePlayer>();
         } else if (mode == 2) {
             SetWindowSize(1000, 620); // Adjust window size for two-player mode
-            game = new TwoPlayer();
+            game = std::make_unique<TwoPlayer>();
         } else {
             throw std::runtime_error("Invalid game mode selected.");
         }
@@ -83,7 +94,6 @@ int main() {
         }
         UnloadMusicStream(music);
         game->Reset();
-        delete game;
         CloseAudioDevice();
         CloseWindow();
     } catch (const std::exception& e) {

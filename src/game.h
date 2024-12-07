@@ -1,6 +1,6 @@
 #pragma once    
 #include "grid.h"
-#include "blocks.cpp"
+#include "blocks.h"
 
 class Game{
 public:
@@ -32,4 +32,6 @@ private:
     std::vector<Block> blocks;
     Block currentBlock;
     Block nextBlock;
+    Sound rotateSound;
+    Sound clearSound;
 };

@@ -1,5 +1,6 @@
 #include "game.h"
 #include <random>
+#include <iostream>
 
 Game::Game(int playerNumber){
     grid = Grid();
@@ -10,9 +11,15 @@ Game::Game(int playerNumber){
     score = 0;
     this->playerNumber = playerNumber;
     font = LoadFontEx("Font/Handjet.ttf", 64, 0, 0);
+    // debugging by printing constructor called
+    std::cout << "Game constructor called" << std::endl; 
+    rotateSound = LoadSound("Sounds/rotate.mp3"); // trying to play sounds breaks the game for some reason
+    clearSound = LoadSound("Sounds/clear.mp3");
 }
 
 Game::~Game(){
+    UnloadSound(rotateSound);
+    UnloadSound(clearSound);
     blocks.clear();
 }
 
@@ -153,15 +160,15 @@ void Game::DrawGameOverScreen(Game &winner)
 {
     BeginDrawing();
     ClearBackground(BLACK);
-    DrawText("Game Over!", 200, 150, 40, RED);
-    DrawText(TextFormat("Winner: Player %d", winner.playerNumber), 200, 220, 30, WHITE);
-    DrawText(TextFormat("Score: %d", winner.score), 200, 260, 30, WHITE);
-    DrawText("Press ENTER to restart", 200, 320, 20, LIGHTGRAY);
+    DrawText("Game Over!", 100, 150, 40, RED);
+    DrawText(TextFormat("Winner: Player %d", winner.playerNumber), 100, 220, 30, WHITE);
+    DrawText(TextFormat("Score: %d", winner.score), 100, 260, 30, WHITE);
+    DrawText("Press ENTER to restart", 100, 320, 20, LIGHTGRAY);
     EndDrawing();
 }
 
 bool Game::IsBlockOutside(){
-    std::vector<Position> tiles = currentBlock.GetCellPositions(); // should i have used a reference here? this line is repeated alot
+    std::vector<Position> tiles = currentBlock.GetCellPositions(); // hmmm this line is repeated alot
     for (Position item : tiles){
         if (grid.IsCellOutside(item.row, item.column))
             return true;
@@ -174,6 +181,8 @@ void Game::RotateBlock(){
         currentBlock.Rotate();
         if (IsBlockOutside() || BlockFits() == false)
             currentBlock.UndoRotation();
+        else
+            PlaySound(rotateSound);
     }
 }
 
@@ -189,8 +198,10 @@ void Game::LockBlock(){
     nextBlock = GetRandomBlock();
     int rowsCleared = grid.ClearFullRows();
 
-    if (rowsCleared > 0)
+    if (rowsCleared > 0){
+        PlaySound(clearSound);
         UpdateScore(rowsCleared, 0);
+    }
 }
 
 bool Game::BlockFits(){

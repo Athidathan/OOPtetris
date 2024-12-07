@@ -1,10 +1,8 @@
 // [src/two_player.cpp](src/two_player.cpp)
 #include "two_player.h"
 
-TwoPlayer::TwoPlayer() {
+TwoPlayer::TwoPlayer() : player1Game(1), player2Game(2) {
     // Initialize the two-player games
-    player1Game = Game(1);
-    player2Game = Game(2);
 }
 
 void TwoPlayer::HandleInput() {

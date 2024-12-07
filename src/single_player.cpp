@@ -1,9 +1,8 @@
 // [src/single_player.cpp](src/single_player.cpp)
 #include "single_player.h"
 
-SinglePlayer::SinglePlayer() {
+SinglePlayer::SinglePlayer() : game(1) {
     // Initialize the single-player game
-    game = Game(1);
 }
 
 void SinglePlayer::HandleInput() {
