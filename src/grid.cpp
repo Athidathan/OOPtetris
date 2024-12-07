@@ -24,13 +24,13 @@ void Grid::Print(){
     }
 }
 
-void Grid::Draw()
+void Grid::Draw(int offsetX, int offsetY)
 {
-    for (int row = 0; row < numRows; row++){   
-        for (int column = 0; column < numCols; column++){
+    for (int row = 0; row < numRows; row++) {   
+        for (int column = 0; column < numCols; column++) {
             int cellValue = grid[row][column];
-            // + 11 to offset the grid, -1 to make the cell smaller for distinction
-            DrawRectangle(column * cellSize + 11, row * cellSize + 11, cellSize - 1, cellSize - 1, colors[cellValue]);
+            // Use offsetX and offsetY to position the grid
+            DrawRectangle(column * cellSize + offsetX + 11, row * cellSize + offsetY + 11, cellSize - 1, cellSize - 1, colors[cellValue]);
         }
     }
 }

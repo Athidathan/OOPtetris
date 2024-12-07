@@ -4,14 +4,19 @@
 
 class Game{
 public:
-    Game();
+    Game(int playerNumber = 1 );
     ~Game();
-    void Draw();
     void HandleInput(); 
+    void HandleInputPlayer1(); // For player 1 controls
+    void HandleInputPlayer2(); // For player 2 controls
+    void Draw(int offsetX = 0, int offsetY = 0); // Accept offsets
     void MoveBlockDown();
+    void DrawGameOverScreen(Game& winner);
+    void Reset();
     bool gameOver;
     int score;
-    Music music;
+    int playerNumber;
+    Font font;
 
 private:
     void MoveBlockLeft();
@@ -22,12 +27,9 @@ private:
     void RotateBlock();
     void LockBlock();
     bool BlockFits();
-    void Reset();
     void UpdateScore(int linesCleared, int moveDownPoints);
     Grid grid;
     std::vector<Block> blocks;
     Block currentBlock;
     Block nextBlock;
-    Sound rotateSound;
-    Sound clearSound;
 };

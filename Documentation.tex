@@ -4,7 +4,10 @@
 \usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{verbatim}
+\usepackage{hyperref}
 \usepackage{url}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
 
 \lstset{
   basicstyle=\ttfamily\footnotesize,
@@ -30,10 +33,11 @@
 
 \begin{document}
 
-\title{Tetris Project Documentation}
-\author{}
-\date{}
+\title{\textbf{Modern Tetris Implementation:\\Object-Oriented Design \& Documentation}}
+\author{By CS23B1023 Athidathan K}
+\date{November 11, 2024}
 \maketitle
+\tableofcontents
 
 \section{Overview}
 
@@ -50,7 +54,6 @@ Font/
     Handjet.ttf
 lib/
     raylib.h
-Sounds/
 src/
     block.cpp
     block.h
@@ -76,7 +79,6 @@ main.code-workspace
 Represents the position of a block in the grid.
 
 \begin{lstlisting}[language=C++]
-
 class Position {
 public:
     int row;
@@ -85,6 +87,7 @@ public:
     Position operator+(const Position& other) const ;
 };
 \end{lstlisting}
+
 \subsection{\texttt{Block} Class Hierarchy (\texttt{src/block.h}, \texttt{src/block.cpp,\texttt{src/blocks.cpp}})}
 \subsubsection{Base \texttt{Block} Class}
 \textbf{Encapsulation}: The \texttt{Block} class encapsulates the properties and behaviors of a Tetris block.
@@ -98,7 +101,6 @@ public:
     void Rotate();
     void UndoRotation();
     std::vector<Position> GetCellPositions();
-
 protected:
     int id;
     int rotationState;
@@ -152,8 +154,7 @@ Represents the game grid where the blocks are placed. Manages the grid state, dr
 #include <vector>
 #include <raylib.h>
 
-class Grid
-{
+class Grid{
 public:
     Grid();
     void Initialize();
@@ -162,7 +163,6 @@ public:
     bool IsCellOutside(int row, int column);
     bool IsCellEmpty(int row, int column);
     int ClearFullRows();
-
 private:
     int grid[20][10];
     int numRows;
@@ -200,8 +200,6 @@ public:
     void MoveBlockDown();
     bool gameOver;
     int score;
-    Music music;
-
 private:
     void MoveBlockLeft();
     void MoveBlockRight();
@@ -215,62 +213,9 @@ private:
     Block currentBlock;
     Block nextBlock;
     std::vector<Block> blocks;
-    Sound rotateSound;
-    Sound clearSound;
 };
 \end{lstlisting}
 
-\subsection{\texttt{Main} Function (\texttt{src/main.cpp})}
-
-The entry point of the application, containing user interface.
-
-\begin{lstlisting}[language=C++]
-// src/main.cpp
-
-#include <raylib.h>
-#include "game.h"
-#include "colors.h"
-
-double lastUpdateTime = 0;
-
-bool EventTriggered(double interval) {
-    double currentTime = GetTime();
-    if (currentTime - lastUpdateTime >= interval) {
-        lastUpdateTime = currentTime;
-        return true;
-    }
-    return false;
-}
-
-int main() {
-    InitWindow(500, 620, "Tetris");
-    SetTargetFPS(60);
-
-    Font font = LoadFontEx("Font/Handjet.ttf", 64, 0, 0);
-
-    Game game;
-
-    while (!WindowShouldClose()) {
-        UpdateMusicStream(game.music);
-        game.HandleInput();
-        if (EventTriggered(0.2)) { // Game speed
-            game.MoveBlockDown();
-        }
-
-        BeginDrawing();
-        ClearBackground(BLACK);
-        game.Draw();
-        DrawTextEx(font, TextFormat("Score: %d", game.score), Vector2{310, 200}, 30, 2, WHITE);
-        if (game.gameOver) {
-            DrawTextEx(font, "Game Over", Vector2{200, 300}, 50, 2, WHITE);
-        }
-        EndDrawing();
-    }
-
-    CloseWindow();
-    return 0;
-}
-\end{lstlisting}
 
 \section{OOP Concepts Incorporated}
 
@@ -293,7 +238,6 @@ public:
     void Rotate();
     void UndoRotation();
     std::vector<Position> GetCellPositions();
-
 protected:
     int id;
     int rotationState;
@@ -327,8 +271,6 @@ public:
     void MoveBlockDown();
     bool gameOver;
     int score;
-    Music music;
-
 private:
     // Private member functions and variables
 };
@@ -363,7 +305,7 @@ public:
     TBlock() {
         id = 6;
         cells[0] = {Position(0, 1), Position(1, 0), Position(1, 1), Position(1, 2)};
-        // Define other rotation states...
+        // other rotation states...
         Move(0, 3);
     }
 };
@@ -397,8 +339,7 @@ Operator overloading is implemented in the \texttt{Position} class to simplify p
 \begin{lstlisting}[language=C++]
 // src/position.cpp
 
-Position Position::operator+(const Position &other) const
-{
+Position Position::operator+(const Position &other) const{
     return Position(row + other.row, column + other.column);
 }
 \end{lstlisting}
@@ -417,7 +358,7 @@ Virtual functions are intended to be used in future extensions, such as when add
 
 \textbf{Example}:
 
-In future development, a \texttt{Player} class could be defined with virtual methods that are overridden by derived classes for different player types.
+In future development, a \texttt{Player} class could be defined with virtual methods that are overridden by derived classes for different player types (e.g., human player, AI player).
 
 \section{Example Code Snippets}
 
@@ -465,9 +406,33 @@ if (EventTriggered(0.2)) { // Game speed is 0.2 seconds
 
 Demonstrates how the game logic moves the current block down at regular intervals.
 
+\section{Screenshots}
+Below are some screenshots demonstrating the gameplay of the Tetris project.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{start.png}
+    \caption{Starting the Tetris game}
+    \label{fig:screenshot_start}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{game_progress.png}
+    \caption{Gameplay in progress}
+    \label{fig:screenshot_gameplay}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{game_over.png}
+    \caption{Game Over screen}
+    \label{fig:screenshot_gameover}
+\end{figure}
 \section{Building the Project}
 
-To build and run the Tetris game, follow these steps:
+The project is developed in C++ using the Raylib graphics library, and the instructions are tailored for Windows users.
+this project was developed on Windows 10 using MinGW-w64 as the compiler. The instructions assume a similar setup, but the project can be adapted for other platforms with minor modifications. The project can also be downloaded from my github \url{https://github.com/Athidathan/OOPtetris/}
 
 \subsection{Requirements}
 
@@ -475,7 +440,7 @@ To build and run the Tetris game, follow these steps:
     \item \textbf{Operating System}: Windows 10 or higher
     \item \textbf{Compiler}: MinGW-w64 (GCC for Windows) or Microsoft Visual Studio
     \item \textbf{Library}: \href{https://www.raylib.com/}{Raylib} (version 4.0 or higher)
-    \item \textbf{Make Build system}: MinGW-w64 includes \texttt{mingw32-make} for building the project using the provided \texttt{Makefile}.
+     \item \textbf{Make Build system}: MinGW-w64 includes \texttt{mingw32-make} for building the project using the provided \texttt{Makefile}.
 \end{itemize}
 
 \subsection{Instructions}
@@ -495,101 +460,25 @@ To build and run the Tetris game, follow these steps:
     game.exe
     \end{lstlisting}
 \end{enumerate}
+
+\begin{verbatim}
+make
+\end{verbatim}
+
+This command will compile the source files and link the necessary libraries to produce the final executable.
+
 \section{Future Plans}
 
 Looking ahead, there are several enhancements planned to expand the functionality and educational value of this Tetris project:
 
 \begin{itemize}
-    \item \textbf{Local Multiplayer}: Implementing a local multiplayer mode where two players can play simultaneously on the same machine. This feature will introduce new dynamics and increase the fun factor.
+    \item \textbf{Local Multiplayer}: Implementing a local multiplayer mode where two players can play simultaneously on the same machine. This feature will introduce new dynamics and while incorporating polymorphism.
     \item \textbf{Additional Game Modes}:
     \begin{itemize}
         \item \textbf{Versus Mode}: Players compete against each other, with mechanics such as sending garbage lines to the opponent when clearing multiple lines.
-        \item \textbf{Cooperative Mode}: Players work together to clear lines and achieve high scores.
         \item \textbf{Challenge Mode}: Players face progressively increasing difficulty levels with unique challenges.
         \item \textbf{Time Attack Mode}: Players aim to score as high as possible within a limited time frame.
     \end{itemize}
-\end{itemize}
-\section{Requirements and Build Instructions}
-
-This section provides detailed instructions on the system requirements, dependencies, and steps to build and run the Tetris project on your local machine. The project is developed in C++ using the Raylib graphics library, and the instructions are tailored for Windows users.
-this project was developed on Windows 10 using MinGW-w64 as the compiler. The instructions assume a similar setup, but the project can be adapted for other platforms with minor modifications.
-\subsection{System Requirements}
-
-\begin{itemize}
-    \item \textbf{Operating System}: Windows 10 or higher
-    \item \textbf{Compiler}:
-    \begin{itemize}
-        \item \textbf{Option 1}: MinGW-w64 (GCC for Windows)
-        \item \textbf{Option 2}: Microsoft Visual Studio with C++ support
-    \end{itemize}
-    \item \textbf{Libraries}:
-    \begin{itemize}
-        \item \href{https://www.raylib.com/}{Raylib} (version 4.0 or higher)
-    \end{itemize}
-\end{itemize}
-
-\subsection{Installing Dependencies}
-
-\subsubsection{Installing MinGW-w64}
-
-\begin{enumerate}
-    \item Download the MinGW-w64 installer from the \href{https://www.mingw-w64.org/}{official website}.
-    \item Run the installer and select the architecture (x86\_64 for 64-bit systems).
-    \item Add the installation \texttt{bin} directory to your system \texttt{PATH} environment variable.
-\end{enumerate}
-
-\subsubsection{Installing Raylib}
-
-\begin{enumerate}
-    \item Download the precompiled Windows binaries for Raylib from the \href{https://github.com/raysan5/raylib/releases}{GitHub releases page}.
-    \item Extract the contents to a known directory, e.g., \texttt{C:\textbackslash raylib}.
-    \item Copy the \texttt{raylib\_compiled\_lib\textbackslash raylib\_libs\textbackslash MinGW} library files to your MinGW installation's \texttt{lib} directory.
-    \item Copy the \texttt{raylib.h} header file to your MinGW installation's \texttt{include} directory.
-\end{enumerate}
-
-\subsubsection{Alternative: Using Microsoft Visual Studio}
-
-\begin{enumerate}
-    \item Install Microsoft Visual Studio with C++ development tools.
-    \item Use the NuGet package manager to install Raylib or manually configure Raylib in your project settings.
-\end{enumerate}
-
-\subsection{Building the Project}
-
-\subsubsection{Using Command Prompt}
-
-\begin{enumerate}
-    \item Open the Command Prompt and navigate to the project directory:
-    \begin{lstlisting}
-    cd path\to\your\project
-    \end{lstlisting}
-    \item Compile the project using the provided \texttt{Makefile}:
-    \begin{lstlisting}
-    mingw32-make
-    \end{lstlisting}
-    \item If \texttt{mingw32-make} is not available, compile manually:
-    \begin{lstlisting}
-    g++ src\*.cpp -o game.exe -Iinclude -Llib -lraylib -lopengl32 -lgdi32 -lwinmm
-    \end{lstlisting}
-    \item Ensure that the \texttt{lib} directory contains the necessary Raylib library files.
-\end{enumerate}
-
-\subsubsection{Running the Game}
-
-\begin{enumerate}
-    \item After successful compilation, run the executable:
-    \begin{lstlisting}
-    game.exe
-    \end{lstlisting}
-    \item Enjoy the Tetris game!
-\end{enumerate}
-
-\subsection{Notes}
-
-\begin{itemize}
-    \item Make sure all source files are located in the \texttt{src} directory.
-    \item Ensure that the \texttt{lib} directory includes all dependency libraries (\texttt{.dll}, \texttt{.lib} files).
-    \item If you encounter any issues with missing DLLs, make sure the Raylib DLL files are in the same directory as the executable or added to the system \texttt{PATH}.
 \end{itemize}
 
 \section{Conclusion}
@@ -598,21 +487,16 @@ This Tetris project serves as a practical example of implementing OOP concepts i
 
 The project demonstrates how to structure a C++ application using classes and inheritance, how to manage game state and logic, and how to integrate a graphics library (Raylib) to handle rendering and input.
 
-With future enhancements especially when the game is extended to support multiplayer functionality. The project offers ample opportunities to delve into advanced topics such as networking, artificial intelligence, and improved user interfaces, further enriching the learning experience
+With future enhancements, especially when the game is extended to support multiplayer functionality. The project offers ample opportunities to delve into advanced topics such as networking, artificial intelligence, and improved user interfaces, further enriching the learning experience.
 \newpage
 \begin{thebibliography}{9}
 
 \bibitem{raylib}
 Raylib Official Website. \url{https://www.raylib.com/}
 
-\bibitem{raylib_github}
-Raylib GitHub Repository. \url{https://github.com/raysan5/raylib}
-
-\bibitem{cpp_doc}
-C++ Reference Documentation. \url{https://en.cppreference.com/}
-
 \bibitem{raylib_tutorials}
-Raylib Learning Resources. \url{https://www.raylib.com/learn.html}
+Raylib Learning Resources. \url{https://github.com/raysan5/raylib/wiki}
+
 \bibitem{tetris}
 Tetris Game. \url{https://en.wikipedia.org/wiki/Tetris}
 \end{thebibliography}
