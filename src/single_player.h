@@ -1,8 +1,7 @@
-// [src/single_player.h](src/single_player.h)
 #pragma once
-#include "player.h"
+#include "game_mode.h"
 
-class SinglePlayer : public Player {
+class SinglePlayer : public GameMode {
 public:
     SinglePlayer();
     void HandleInput() override;

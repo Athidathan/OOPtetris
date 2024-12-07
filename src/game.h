@@ -6,8 +6,7 @@ class Game{
 public:
     Game(int playerNumber = 1 );
     ~Game();
-    void HandleInput(); 
-    void HandleInputPlayer1(); // For player 1 controls
+    void HandleInput();  // For player 1 controls
     void HandleInputPlayer2(); // For player 2 controls
     void Draw(int offsetX = 0, int offsetY = 0); // Accept offsets
     void MoveBlockDown();

@@ -44,7 +44,7 @@ int main() {
         PlayMusicStream(music);
         int mode = ShowTitleScreen();
 
-        Player* game = nullptr;
+        GameMode* game = nullptr;
         if (mode == 1) {
             game = new SinglePlayer();
         } else if (mode == 2) {
@@ -84,7 +84,7 @@ int main() {
         CloseWindow();
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
+        return EXIT_FAILURE;
     }
-    return 0;  
+    return EXIT_SUCCESS;  
 }

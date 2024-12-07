@@ -11,9 +11,7 @@ Game::Game(int playerNumber){
     score = 0;
     this->playerNumber = playerNumber;
     font = LoadFontEx("Font/Handjet.ttf", 64, 0, 0);
-    // debugging by printing constructor called
-    std::cout << "Game constructor called" << std::endl; 
-    rotateSound = LoadSound("Sounds/rotate.mp3"); // trying to play sounds breaks the game for some reason
+    rotateSound = LoadSound("Sounds/rotate.mp3"); 
     clearSound = LoadSound("Sounds/clear.mp3");
 }
 
@@ -40,13 +38,14 @@ std::vector<Block> Game::GetAllBlocks(){
 
 void Game::Draw(int offsetX, int offsetY) {
     grid.Draw(offsetX, offsetY);
+
+    //print UI
     currentBlock.Draw(offsetX + 11, offsetY + 11);
     DrawTextEx(font, "Score", {(float)(365 + offsetX), (float)(15 + offsetY)}, 38, 2, WHITE);
     char playerText[10];
     sprintf(playerText, "Player %d", playerNumber);
     DrawTextEx(font, playerText, {(float)(365 + offsetX), (float)(500 + offsetY)}, 38, 2, WHITE);
     DrawTextEx(font, "Next", {(float)(370 + offsetX),(float) (175 + offsetY)}, 38, 2, WHITE);
-    // Preview next block with adjusted positions
     DrawRectangleRounded({(float) 320 + offsetX,(float) 55 + offsetY, 170, 60}, 0.3, 6, darkGrey);
     char scoreText[10];
     sprintf(scoreText, "%d", score);
@@ -54,6 +53,7 @@ void Game::Draw(int offsetX, int offsetY) {
     DrawTextEx(font, scoreText, { (float) offsetX + 320 + (170 - textSize.x) / 2, (float)offsetY + 65}, 38, 2, WHITE);
     DrawRectangleRounded({(float) 320 + offsetX,(float) 215 + offsetY, 170, 180}, 0.3, 6, darkGrey);
     
+    // Preview next block 
     int previewX, previewY;
     switch (nextBlock.id) {
         case 3:
@@ -74,11 +74,6 @@ void Game::Draw(int offsetX, int offsetY) {
 // make Handle input  virtual later?
 void Game::HandleInput() {
     // Player 1 controls
-    int keyPressed = GetKeyPressed();
-    if (gameOver && keyPressed != 0){
-        gameOver = false;
-        Reset();
-    }
     if (IsKeyPressed(KEY_A)) MoveBlockLeft();
     if (IsKeyPressed(KEY_D)) MoveBlockRight();
     if (IsKeyPressed(KEY_W)) RotateBlock();
@@ -90,11 +85,6 @@ void Game::HandleInput() {
 
 void Game::HandleInputPlayer2() {
     // Player 2 controls
-    int keyPressed = GetKeyPressed();
-    if (gameOver && keyPressed != 0){
-        gameOver = false;
-        Reset();
-    }
     if (IsKeyPressed(KEY_LEFT)) MoveBlockLeft();
     if (IsKeyPressed(KEY_RIGHT)) MoveBlockRight();
     if (IsKeyPressed(KEY_UP)) RotateBlock();
@@ -197,22 +187,10 @@ void Game::Reset(){
 }
 
 void Game::UpdateScore(int linesCleared, int moveDownPoints){
-    switch (linesCleared){
-    case 1:
-        score += 100;
-        break;
-    case 2:
-        score += 200;
-        break;
-    case 3:
-        score += 400;
-        break;
-    case 4:
-        score += 800;
-        break;
-    default:
-        break;
-    }
-
+    if (linesCleared == 1) score += 100;
+    else if (linesCleared == 2) score += 200;
+    else if (linesCleared == 3) score += 400;
+    else if (linesCleared == 4) score += 800;
+    // No need for else case as we can't break more than 4 lines at once
     score += moveDownPoints;
 }

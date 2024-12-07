@@ -9,8 +9,6 @@ class Block
 public:
     Block();
     int id;
-    // should i have used pair instead of making a class for Position?
-    // std::vector<std::pair<int, int>> cells;
     void Draw(int offsetX, int offsetY);
     void Move(int rows, int columns);
     void Move(const Position& pos);

@@ -1,4 +1,3 @@
-// [src/single_player.cpp](src/single_player.cpp)
 #include "single_player.h"
 
 SinglePlayer::SinglePlayer() : game(1) {

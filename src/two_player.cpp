@@ -1,4 +1,3 @@
-// [src/two_player.cpp](src/two_player.cpp)
 #include "two_player.h"
 
 TwoPlayer::TwoPlayer() : player1Game(1), player2Game(2) {
