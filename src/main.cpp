@@ -1,18 +1,13 @@
-// [src/main.cpp](src/main.cpp)
 #include <raylib.h>
 #include "game.h"
-#include "colors.h"
 #include <iostream>
 #include "single_player.h"
 #include "two_player.h"
-#include <stdexcept>
-#include <memory>
- // For exception handling
+#include <stdexcept>  // For exception handling
 double lastUpdateTime = 0;
 bool EventTriggered(double interval){
     double currentTime = GetTime();
-    if (currentTime - lastUpdateTime >= interval)
-    {
+    if (currentTime - lastUpdateTime >= interval){
         lastUpdateTime = currentTime;
         return true;
     }
@@ -20,10 +15,10 @@ bool EventTriggered(double interval){
 }
 int ShowTitleScreen() {
     int mode = 0;
-    while (!WindowShouldClose()) {
+    while (!WindowShouldClose()){
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawText("TETRIS", 150, 100, 50, WHITE);
+        DrawText("TETRIS", 125, 100, 50, WHITE);
         DrawText("Press 1 for Single Player", 100, 200, 20, WHITE);
         DrawText("Press 2 for Two Players", 100, 250, 20, WHITE);
         EndDrawing();
@@ -49,25 +44,16 @@ int main() {
         PlayMusicStream(music);
         int mode = ShowTitleScreen();
 
-        // Player* game = nullptr;
-        // if (mode == 1) {
-        //     game = new SinglePlayer();
-        // } else if (mode == 2) {
-        //     SetWindowSize(1000, 620); // Adjust window size for two-player mode
-        //     game = new TwoPlayer();
-        // } else {
-        //     throw std::runtime_error("Invalid game mode selected.");
-        // }
-
-        std::unique_ptr<Player> game = nullptr;
+        Player* game = nullptr;
         if (mode == 1) {
-            game = std::make_unique<SinglePlayer>();
+            game = new SinglePlayer();
         } else if (mode == 2) {
             SetWindowSize(1000, 620); // Adjust window size for two-player mode
-            game = std::make_unique<TwoPlayer>();
+            game = new TwoPlayer();
         } else {
             throw std::runtime_error("Invalid game mode selected.");
         }
+
         while (!WindowShouldClose()) {
             
             if (game->IsGameOver()) {

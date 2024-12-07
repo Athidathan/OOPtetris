@@ -71,34 +71,8 @@ void Game::Draw(int offsetX, int offsetY) {
     }
     nextBlock.Draw(previewX, previewY);
 }
-// make this virtual later?
-void Game::HandleInput(){
-    int keyPressed = GetKeyPressed();
-    if (gameOver && keyPressed != 0){
-        gameOver = false;
-        Reset();
-    }
-    switch (keyPressed){
-    case KEY_LEFT:
-        MoveBlockLeft();
-        break;
-    case KEY_RIGHT:
-        MoveBlockRight();
-        break;
-    case KEY_DOWN:
-        // Soft drop
-        MoveBlockDown();
-        MoveBlockDown();
-        UpdateScore(0, 2);
-        break;
-    case KEY_UP:
-        RotateBlock();
-        break;
-    }
-}
-
-// [src/game.cpp](src/game.cpp)
-void Game::HandleInputPlayer1() {
+// make Handle input  virtual later?
+void Game::HandleInput() {
     // Player 1 controls
     int keyPressed = GetKeyPressed();
     if (gameOver && keyPressed != 0){

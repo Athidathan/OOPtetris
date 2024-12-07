@@ -13,8 +13,8 @@ public:
     int getWinnerScore()  { return GetWinner()->score; }
     virtual void Reset() { 
         player1Game.Reset(); 
-        player2Game.Reset(); }
-    int winnerPlayer();
+        player2Game.Reset(); 
+    }
 private:
     Game player1Game;
     Game player2Game;

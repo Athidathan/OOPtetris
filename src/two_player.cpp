@@ -7,7 +7,7 @@ TwoPlayer::TwoPlayer() : player1Game(1), player2Game(2) {
 
 void TwoPlayer::HandleInput() {
     // Implement separate input handling for each player
-    player1Game.HandleInputPlayer1();
+    player1Game.HandleInput();
     player2Game.HandleInputPlayer2();
 }
 
